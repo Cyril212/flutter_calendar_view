@@ -201,6 +201,9 @@ class WeekView<T extends Object?> extends StatefulWidget {
   /// First hour displayed in the layout, goes from 0 to 24
   final int? startHour;
 
+  /// Last hour displayed in the layout, default value is 24
+  final int? endHour;
+
   ///Show half hour indicator
   final bool showHalfHours;
 
@@ -267,6 +270,7 @@ class WeekView<T extends Object?> extends StatefulWidget {
     this.showQuarterHours = false,
     this.emulateVerticalOffsetBy = 0,
     this.showWeekDayAtBottom = false,
+    this.endHour,
   })  : assert(!(onHeaderTitleTap != null && weekPageHeaderBuilder != null),
             "can't use [onHeaderTitleTap] & [weekPageHeaderBuilder] simultaneously"),
         assert((timeLineOffset) >= 0,
@@ -335,6 +339,8 @@ class WeekViewState<T extends Object?> extends State<WeekView<T>> {
 
   late int _startHour;
 
+  late int _endHour;
+
   final _scrollConfiguration = EventScrollConfiguration();
 
   @override
@@ -344,6 +350,8 @@ class WeekViewState<T extends Object?> extends State<WeekView<T>> {
     _startHour = widget.startHour ?? 0;
     //Security to avoid any height bug
     if (_startHour > 24) _startHour = 0;
+
+    _endHour = widget.endHour ?? Constants.hoursADay;
 
     _reloadCallback = _reload;
 
@@ -497,6 +505,7 @@ class WeekViewState<T extends Object?> extends State<WeekView<T>> {
                             scrollConfiguration: _scrollConfiguration,
                             fullDayEventBuilder: _fullDayEventBuilder,
                             startHour: _startHour,
+                            endHour: _endHour,
                             showHalfHours: widget.showHalfHours,
                             showQuarterHours: widget.showQuarterHours,
                             emulateVerticalOffsetBy:
@@ -600,7 +609,7 @@ class WeekViewState<T extends Object?> extends State<WeekView<T>> {
 
   void _calculateHeights() {
     _hourHeight = widget.heightPerMinute * 60;
-    _height = _hourHeight * (Constants.hoursADay - _startHour);
+    _height = _hourHeight * (_endHour - _startHour);
   }
 
   void _assignBuilders() {
@@ -679,7 +688,7 @@ class WeekViewState<T extends Object?> extends State<WeekView<T>> {
   }) {
     final heightPerSlot = minuteSlotSize.minutes * heightPerMinute;
     final slots =
-        ((Constants.hoursADay - _startHour) * 60) ~/ minuteSlotSize.minutes;
+        ((_endHour - _startHour) * 60) ~/ minuteSlotSize.minutes;
 
     return Container(
       height: height,
@@ -844,7 +853,8 @@ class WeekViewState<T extends Object?> extends State<WeekView<T>> {
       double dashWidth,
       double dashSpaceWidth,
       double emulateVerticalOffsetBy,
-      int startHour) {
+      int startHour,
+      int endHour) {
     return HourLinePainter(
         lineColor: lineColor,
         lineHeight: lineHeight,
@@ -856,7 +866,8 @@ class WeekViewState<T extends Object?> extends State<WeekView<T>> {
         dashWidth: dashWidth,
         dashSpaceWidth: dashSpaceWidth,
         emulateVerticalOffsetBy: emulateVerticalOffsetBy,
-        startHour: startHour);
+        startHour: startHour,
+        endHour: endHour);
   }
 
   /// Called when user change page using any gesture or inbuilt functions.

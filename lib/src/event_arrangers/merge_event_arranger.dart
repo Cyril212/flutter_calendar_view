@@ -26,13 +26,13 @@ class MergeEventArranger<T extends Object?> extends EventArranger<T> {
   /// Make sure that all the events that are passed in [events], must be in
   /// ascending order of start time.
   @override
-  List<OrganizedCalendarEventData<T>> arrange({
-    required List<CalendarEventData<T>> events,
-    required double height,
-    required double width,
-    required double heightPerMinute,
-    required int startHour,
-  }) {
+  List<OrganizedCalendarEventData<T>> arrange(
+      {required List<CalendarEventData<T>> events,
+      required double height,
+      required double width,
+      required double heightPerMinute,
+      required int startHour,
+      required int endHour}) {
     // TODO: Right now all the events that are passed in this function must be
     // sorted in ascending order of the start time.
     //
@@ -69,7 +69,7 @@ class MergeEventArranger<T extends Object?> extends EventArranger<T> {
       // The number of minutes from 00h00 to startHour which is equal to startHour * 60
       final eventStart = startTime.getTotalMinutes - (startHour * 60);
       final eventEnd = endTime.getTotalMinutes - (startHour * 60) == 0
-          ? Constants.minutesADay - (startHour * 60)
+          ? (endHour * 60) - (startHour * 60)
           : endTime.getTotalMinutes - (startHour * 60);
 
       final arrangeEventLen = arrangedEvents.length;
@@ -82,7 +82,7 @@ class MergeEventArranger<T extends Object?> extends EventArranger<T> {
 
         final arrangedEventEnd =
             arrangedEvents[i].endDuration.getTotalMinutes == 0
-                ? Constants.minutesADay
+                ? (endHour * 60)
                 : arrangedEvents[i].endDuration.getTotalMinutes;
 
         if (_checkIsOverlapping(
@@ -116,7 +116,7 @@ class MergeEventArranger<T extends Object?> extends EventArranger<T> {
             arrangedEventData.startDuration.getTotalMinutes;
         final arrangedEventEnd =
             arrangedEventData.endDuration.getTotalMinutes == 0
-                ? Constants.minutesADay
+                ? (endHour * 60)
                 : arrangedEventData.endDuration.getTotalMinutes;
 
         final startDuration = math.min(eventStart, arrangedEventStart);

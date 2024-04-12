@@ -37,6 +37,7 @@ abstract class EventArranger<T extends Object?> {
     required double width,
     required double heightPerMinute,
     required int startHour,
+    required int endHour,
   });
 }
 

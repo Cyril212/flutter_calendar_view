@@ -24,22 +24,22 @@ class SideEventArranger<T extends Object?> extends EventArranger<T> {
   /// Make sure that all the events that are passed in [events], must be in
   /// ascending order of start time.
   @override
-  List<OrganizedCalendarEventData<T>> arrange({
-    required List<CalendarEventData<T>> events,
-    required double height,
-    required double width,
-    required double heightPerMinute,
-    required int startHour,
-  }) {
+  List<OrganizedCalendarEventData<T>> arrange(
+      {required List<CalendarEventData<T>> events,
+      required double height,
+      required double width,
+      required double heightPerMinute,
+      required int startHour,
+      required int endHour}) {
     final mergedEvents = MergeEventArranger<T>(
       includeEdges: includeEdges,
     ).arrange(
-      events: events,
-      height: height,
-      width: width,
-      heightPerMinute: heightPerMinute,
-      startHour: startHour,
-    );
+        events: events,
+        height: height,
+        width: width,
+        heightPerMinute: heightPerMinute,
+        startHour: startHour,
+        endHour: endHour);
 
     final arrangedEvents = <OrganizedCalendarEventData<T>>[];
 
@@ -62,7 +62,7 @@ class SideEventArranger<T extends Object?> extends EventArranger<T> {
       while (concurrentEvents.isNotEmpty) {
         final event = concurrentEvents[currentEventIndex];
         final end = event.endTime!.getTotalMinutes == 0
-            ? Constants.minutesADay
+            ? (endHour * 60)
             : event.endTime!.getTotalMinutes;
         sideEventData.add(_SideEventData(column: column, event: event));
         concurrentEvents.removeAt(currentEventIndex);
@@ -109,7 +109,7 @@ class SideEventArranger<T extends Object?> extends EventArranger<T> {
 
         final bottom = height -
             (endTime.getTotalMinutes - (startHour * 60) == 0
-                    ? Constants.minutesADay - (startHour * 60)
+                    ?  (endHour * 60)- (startHour * 60)
                     : endTime.getTotalMinutes - (startHour * 60)) *
                 heightPerMinute;
 

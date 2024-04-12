@@ -294,6 +294,7 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
   late int _totalDays;
   late int _currentIndex;
   late int _startHour;
+  late int _endHour;
 
   late EventArranger<T> _eventArranger;
 
@@ -471,6 +472,7 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
                             halfHourIndicatorSettings:
                                 _halfHourIndicatorSettings,
                             startHour: _startHour,
+                            endHour: _endHour,
                             quarterHourIndicatorSettings:
                                 _quarterHourIndicatorSettings,
                             emulateVerticalOffsetBy:
@@ -556,7 +558,7 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
 
   void _calculateHeights() {
     _hourHeight = widget.heightPerMinute * 60;
-    _height = _hourHeight * (Constants.hoursADay - _startHour);
+    _height = _hourHeight * (_endHour - _startHour);
   }
 
   void _assignBuilders() {
@@ -613,7 +615,7 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
     required MinuteSlotSize minuteSlotSize,
   }) {
     final heightPerSlot = minuteSlotSize.minutes * heightPerMinute;
-    final slots = (Constants.hoursADay * 60) ~/ minuteSlotSize.minutes;
+    final slots = (_endHour * 60) ~/ minuteSlotSize.minutes;
 
     return Container(
       height: height,
@@ -730,7 +732,8 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
       double dashWidth,
       double dashSpaceWidth,
       double emulateVerticalOffsetBy,
-      int startHour) {
+      int startHour,
+      int endHour) {
     return HourLinePainter(
         lineColor: lineColor,
         lineHeight: lineHeight,
@@ -742,7 +745,8 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
         dashWidth: dashWidth,
         dashSpaceWidth: dashSpaceWidth,
         emulateVerticalOffsetBy: emulateVerticalOffsetBy,
-        startHour: startHour);
+        startHour: startHour,
+        endHour: endHour);
   }
 
   /// Called when user change page using any gesture or inbuilt functions.

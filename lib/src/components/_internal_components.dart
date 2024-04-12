@@ -130,6 +130,9 @@ class TimeLine extends StatefulWidget {
   /// First hour displayed in the layout
   final int startHour;
 
+  /// Last hour displayed in the layout
+  final int endHour;
+
   /// Flag to display quarter hours.
   final bool showQuarterHours;
 
@@ -150,6 +153,7 @@ class TimeLine extends StatefulWidget {
     required this.timeLineOffset,
     required this.timeLineBuilder,
     required this.startHour,
+    required this.endHour,
     this.showHalfHours = false,
     this.showQuarterHours = false,
     required this.liveTimeIndicatorSettings,
@@ -199,7 +203,7 @@ class _TimeLineState extends State<TimeLine> {
       ),
       child: Stack(
         children: [
-          for (int i = widget.startHour + 1; i < Constants.hoursADay; i++)
+          for (int i = widget.startHour + 1; i < widget.endHour; i++)
             _timelinePositioned(
               topPosition: widget.hourHeight * (i - widget.startHour) -
                   widget.timeLineOffset,
@@ -209,7 +213,7 @@ class _TimeLineState extends State<TimeLine> {
               hour: i,
             ),
           if (widget.showHalfHours)
-            for (int i = widget.startHour; i < Constants.hoursADay; i++)
+            for (int i = widget.startHour; i < widget.endHour; i++)
               _timelinePositioned(
                 topPosition: widget.hourHeight * (i - widget.startHour) -
                     widget.timeLineOffset +
@@ -221,7 +225,7 @@ class _TimeLineState extends State<TimeLine> {
                 minutes: 30,
               ),
           if (widget.showQuarterHours)
-            for (int i = 0; i < Constants.hoursADay; i++) ...[
+            for (int i = 0; i < widget.endHour; i++) ...[
               /// this is for 15 minutes
               _timelinePositioned(
                 topPosition: widget.hourHeight * i -
@@ -312,6 +316,9 @@ class EventGenerator<T extends Object?> extends StatelessWidget {
   /// First hour displayed in the layout
   final int startHour;
 
+  /// Last hour displayed in the layout
+  final int endHour;
+
   /// Called when user taps on event tile.
   final CellTapCallback<T>? onTileTap;
 
@@ -326,6 +333,7 @@ class EventGenerator<T extends Object?> extends StatelessWidget {
     required this.heightPerMinute,
     required this.eventArranger,
     required this.startHour,
+    required this.endHour,
     required this.eventTileBuilder,
     required this.date,
     required this.onTileTap,
@@ -341,7 +349,8 @@ class EventGenerator<T extends Object?> extends StatelessWidget {
         height: height,
         width: width,
         heightPerMinute: heightPerMinute,
-        startHour: startHour);
+        startHour: startHour,
+        endHour: endHour);
 
     return List.generate(events.length, (index) {
       return Positioned(
@@ -441,6 +450,9 @@ class PressDetector extends StatelessWidget {
   /// First hour displayed in the layout
   final int startHour;
 
+  /// Last hour displayed in the layout
+  final int endHour;
+
   /// A widget that display event tiles in day/week view.
   const PressDetector({
     Key? key,
@@ -452,13 +464,13 @@ class PressDetector extends StatelessWidget {
     required this.onDateTap,
     required this.minuteSlotSize,
     required this.startHour,
+    required this.endHour,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final heightPerSlot = minuteSlotSize.minutes * heightPerMinute;
-    final slots =
-        ((Constants.hoursADay - startHour) * 60) ~/ minuteSlotSize.minutes;
+    final slots = ((endHour - startHour) * 60) ~/ minuteSlotSize.minutes;
 
     return Container(
       height: height,

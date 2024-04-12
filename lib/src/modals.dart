@@ -2,6 +2,7 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
+import 'package:calendar_view/src/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'enumerations.dart';
@@ -16,17 +17,19 @@ class HourIndicatorSettings {
   final double dashWidth;
   final double dashSpaceWidth;
   final int startHour;
+  final int endHour;
 
   /// Settings for hour lines
-  const HourIndicatorSettings(
-      {this.height = 1.0,
-      this.offset = 0.0,
-      this.color = Colors.grey,
-      this.lineStyle = LineStyle.solid,
-      this.dashWidth = 4,
-      this.dashSpaceWidth = 4,
-      this.startHour = 0})
-      : assert(height >= 0, "Height must be greater than or equal to 0.");
+  const HourIndicatorSettings({
+    this.height = 1.0,
+    this.offset = 0.0,
+    this.color = Colors.grey,
+    this.lineStyle = LineStyle.solid,
+    this.dashWidth = 4,
+    this.dashSpaceWidth = 4,
+    this.startHour = 0,
+    this.endHour = Constants.hoursADay,
+  }) : assert(height >= 0, "Height must be greater than or equal to 0.");
 
   factory HourIndicatorSettings.none() => HourIndicatorSettings(
         color: Colors.transparent,

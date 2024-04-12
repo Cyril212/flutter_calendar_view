@@ -107,6 +107,9 @@ class InternalDayViewPage<T extends Object?> extends StatelessWidget {
   /// First hour displayed in the layout
   final int startHour;
 
+  /// Last hour displayed in the layout
+  final int endHour;
+
   /// Settings for half hour indicator lines.
   final HourIndicatorSettings quarterHourIndicatorSettings;
 
@@ -149,6 +152,7 @@ class InternalDayViewPage<T extends Object?> extends StatelessWidget {
     required this.startHour,
     required this.quarterHourIndicatorSettings,
     required this.emulateVerticalOffsetBy,
+    required this.endHour,
   }) : super(key: key);
 
   @override
@@ -183,7 +187,8 @@ class InternalDayViewPage<T extends Object?> extends StatelessWidget {
                           dashWidth: hourIndicatorSettings.dashWidth,
                           dashSpaceWidth: hourIndicatorSettings.dashSpaceWidth,
                           emulateVerticalOffsetBy: emulateVerticalOffsetBy,
-                          startHour: startHour),
+                          startHour: startHour,
+                          endHour: endHour),
                     ),
                     if (showHalfHours)
                       CustomPaint(
@@ -199,6 +204,7 @@ class InternalDayViewPage<T extends Object?> extends StatelessWidget {
                           dashSpaceWidth:
                               halfHourIndicatorSettings.dashSpaceWidth,
                           startHour: startHour,
+                          endHour: endHour,
                         ),
                       ),
                     if (showQuarterHours)
@@ -238,6 +244,7 @@ class InternalDayViewPage<T extends Object?> extends StatelessWidget {
                         eventTileBuilder: eventTileBuilder,
                         scrollNotifier: scrollNotifier,
                         startHour: startHour,
+                        endHour: endHour,
                         width: width -
                             timeLineWidth -
                             hourIndicatorSettings.offset -
@@ -252,6 +259,7 @@ class InternalDayViewPage<T extends Object?> extends StatelessWidget {
                       timeLineWidth: timeLineWidth,
                       showHalfHours: showHalfHours,
                       startHour: startHour,
+                      endHour: endHour,
                       showQuarterHours: showQuarterHours,
                       key: ValueKey(heightPerMinute),
                       liveTimeIndicatorSettings: liveTimeIndicatorSettings,
