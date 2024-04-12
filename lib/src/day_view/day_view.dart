@@ -200,6 +200,9 @@ class DayView<T extends Object?> extends StatefulWidget {
   /// First hour displayed in the layout, goes from 0 to 24
   final int? startHour;
 
+  /// Last hour displayed in the layout, default is 24
+  final int? endHour;
+
   /// Show half hour indicator
   final bool showHalfHours;
 
@@ -258,6 +261,7 @@ class DayView<T extends Object?> extends StatefulWidget {
     this.showQuarterHours = false,
     this.halfHourIndicatorSettings,
     this.startHour,
+    this.endHour,
     this.quarterHourIndicatorSettings,
     this.startDuration = const Duration(hours: 0),
     this.onHeaderTitleTap,
@@ -333,6 +337,8 @@ class DayViewState<T extends Object?> extends State<DayView<T>> {
 
     _startHour = widget.startHour ?? 0;
     if (_startHour > 24) _startHour = 0;
+
+    _endHour = widget.endHour ?? Constants.hoursADay;
 
     _reloadCallback = _reload;
     _setDateRange();
