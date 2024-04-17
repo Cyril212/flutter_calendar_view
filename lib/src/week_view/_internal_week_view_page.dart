@@ -370,6 +370,7 @@ class InternalWeekViewPage<T extends Object?> extends StatelessWidget {
                         height: height,
                         heightPerMinute: heightPerMinute,
                         timeLineWidth: timeLineWidth,
+                        startHour: startHour
                       ),
                   ],
                 ),
